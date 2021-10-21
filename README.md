@@ -1,6 +1,6 @@
 # Emailer
-The main purpose of this module is provide all the functionality related Bulk Email sender.
- I am Developing all type of CRUD (Create, Read, Update and Delete) operations of the Email save in Database also this module contains the scheduler for as a schedule mails sender 
+The main purpose of this module is to provide all the functionality related to Bulk Email sender.
+ I am Developing all type of CRUD (Create, Read, Update and Delete) operations of the Email saved in Database also this module contains the scheduler to schedule mails to the sender 
 which has been developed on
 
 NodeJS, VueJS, Mongo 
