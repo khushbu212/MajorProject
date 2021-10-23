@@ -45,7 +45,31 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
+  {
+    path: '/groups',
+    name: 'groups',
+    component: () => import('../views/group.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/groups/add',
+    name: 'group-add',
+    component: () => import("../components/group/CreateComponent"),
+     meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/groups/edit/:id',
+    name: 'group-edit',
+    component: () => import('../components/group/EditComponent'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 ];
 const router = new VueRouter({
   mode: "history",

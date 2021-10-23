@@ -2,7 +2,7 @@
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <router-link to="/home" class="navbar-brand">Home</router-link>
+        <router-link to="/home" class="navbar-brand">Dashboard</router-link>
         
         <button
           class="navbar-toggler"
@@ -21,7 +21,10 @@
         >
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link to="/student" class="nav-link">Student</router-link>
+               <router-link to="/groups" class="nav-link">Groups</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/student" class="nav-link">Students</router-link>
               
             </li>
             <li class="nav-item active">
