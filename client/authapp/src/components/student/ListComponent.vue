@@ -71,6 +71,7 @@ export default {
         },
       })
       .then((res) => {
+        console.log(res);
         this.Students = res.data;
       })
       .catch((error) => {

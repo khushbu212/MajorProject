@@ -1,11 +1,12 @@
 const express = require('express');
-const studentRoute = express.Router();
+const router = express.Router();
 const auth = require("../../../config/auth");
+const studentController = require("../controller/studentController");
 
 // Student model
 let StudentModel = require('../model/Student');
 
-studentRoute.route('/').get(auth,(req, res) => {
+router.route('/').get(auth,(req, res) => {
     StudentModel.find((error, data) => {
      if (error) {
        return next(error)
@@ -15,17 +16,19 @@ studentRoute.route('/').get(auth,(req, res) => {
    })
  })
 
- studentRoute.route('/create-student').post(auth,(req, res, next) => {
-    StudentModel.create(req.body, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-});
+ router.post('/create-student',studentController.registerNewStudent)
 
-studentRoute.route('/edit-student/:id').get(auth,(req, res) => {
+//  router.route('/create-student').post(auth,(req, res, next) => {
+//     StudentModel.create(req.body, (error, data) => {
+//     if (error) {
+//       return next(error)
+//     } else {
+//       res.json(data)
+//     }
+//   })
+// });
+
+router.route('/edit-student/:id').get(auth,(req, res) => {
    StudentModel.findById(req.params.id, (error, data) => {
     if (error) {
       return next(error)
@@ -36,7 +39,7 @@ studentRoute.route('/edit-student/:id').get(auth,(req, res) => {
 })
 
 // Update student
-studentRoute.route('/update-student/:id').post(auth,(req, res, next) => {
+router.route('/update-student/:id').post(auth,(req, res, next) => {
   StudentModel.findByIdAndUpdate(req.params.id, {
     $set: req.body
   }, (error, data) => {
@@ -50,7 +53,7 @@ studentRoute.route('/update-student/:id').post(auth,(req, res, next) => {
 })
 
 // Delete student
-studentRoute.route('/delete-student/:id').delete(auth,(req, res, next) => {
+router.route('/delete-student/:id').delete(auth,(req, res, next) => {
   StudentModel.findByIdAndRemove(req.params.id, (error, data) => {
     if (error) {
       return next(error);
@@ -62,4 +65,4 @@ studentRoute.route('/delete-student/:id').delete(auth,(req, res, next) => {
   })
 })
 
-module.exports = studentRoute;
+module.exports = router;

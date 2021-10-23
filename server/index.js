@@ -30,8 +30,10 @@ app.get("/", (req, res) => {
 });
 const userRoutes = require("./api/user/route/user"); //bring in our user routes
 const studentRoutes = require("./api/student/route/student");
+const groupRoutes = require("./api/group/route/group");
 app.use("/user", userRoutes);
 app.use("/student", studentRoutes);
+app.use("/group", groupRoutes);
 app.listen(PORT, () => {
   console.log(`App is running on ${PORT}`);
 });

@@ -1,42 +1,54 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-md-6">
-      <h3 class="text-center">Update Student</h3>
-      <form @submit.prevent="handleUpdateForm">
-        <div class="form-group">
-          <label>Name</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="student.name"
-            required
-          />
-        </div>
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">Update Student</div>
+        <div class="card-body">
+          <form @submit.prevent="handleUpdateForm">
+            <div class="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="student.name"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            class="form-control"
-            v-model="student.email"
-            required
-          />
-        </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                class="form-control"
+                v-model="student.email"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <label>Phone</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="student.phone"
-            required
-          />
-        </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="student.phone"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Group</label>
+              <select v-model="student.group" class="form-control">
+                <option v-for="group in groups" v-bind:value="group.id" v-bind:key="group.id" >
+                  {{ group.name }}
+                </option>
+            </select>
+            </div>
 
-        <div class="form-group">
-          <button class="btn btn-danger btn-block">Update</button>
+            <div class="form-group">
+              <button class="btn btn-danger btn-block update-btn">Update</button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +60,24 @@ export default {
   data() {
     return {
       student: {},
+      groups: {}
     };
+  },
+  mounted() {
+    let apiURL = "http://localhost:4000/group/"
+    let token = localStorage.getItem("jwt");
+
+    axios.get(apiURL,{
+          headers: {
+            Authorization: token,
+          },
+        }).then((res)=>{
+          console.log(res);
+          this.groups = res.data;
+        }).catch(error => {
+           console.log(error);
+        })
+
   },
   created() {
     let token = localStorage.getItem("jwt");
@@ -86,3 +115,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.update-btn{
+  margin: 1em;
+}
+</style>

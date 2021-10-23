@@ -34,6 +34,15 @@
                 required
               />
             </div>
+            <div class="form-group">
+              <label>Group</label>
+              <select v-model="student.group" class="form-control">
+                <option v-for="group in groups" v-bind:value="group.id" v-bind:key="group.id" >
+                  {{ group.name }}
+                </option>
+            </select>
+            </div>
+            
 
             <div class="form-group">
               <button class="btn btn-danger btn-block create-btn">Create</button>
@@ -55,8 +64,27 @@ export default {
         name: "",
         email: "",
         phone: "",
+        group: ""
       },
+      groups:{},
+    
     };
+  },
+  mounted() {
+    let apiURL = "http://localhost:4000/group/"
+    let token = localStorage.getItem("jwt");
+
+    axios.get(apiURL,{
+          headers: {
+            Authorization: token,
+          },
+        }).then((res)=>{
+          console.log(res);
+          this.groups = res.data;
+        }).catch(error => {
+           console.log(error);
+        })
+
   },
   methods: {
     handleSubmitForm() {

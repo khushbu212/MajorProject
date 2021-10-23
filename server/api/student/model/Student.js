@@ -11,8 +11,13 @@ let studentSchema = new Schema({
   phone: {
     type: Number
   },
+  group: {
+    type: Schema.Types.ObjectId,
+    ref: 'Group',
+    required: true
+ }
 }, {
   collection: 'students'
-})
+},{timestamps: true})
 
 module.exports = mongoose.model('Student', studentSchema)
