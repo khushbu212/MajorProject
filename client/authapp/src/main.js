@@ -4,6 +4,12 @@ import router from "./router";
 import store from "./store";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
+import VueSweetalert2 from 'vue-sweetalert2';
+
+// If you don't need the styles, do not connect
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+Vue.use(VueSweetalert2);
 
 const base = axios.create({
   baseURL: "http://localhost:4000"

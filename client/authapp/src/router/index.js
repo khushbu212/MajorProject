@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+
+
 Vue.use(VueRouter);
 const routes = [
   {
@@ -20,6 +22,29 @@ const routes = [
     path: "/register",
     name: "register",
     component: () => import("../views/register.vue")
+  },
+  {
+    path: '/student',
+    component: () => import("../views/student.vue"),
+     meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/student/add',
+    name: 'add',
+    component: () => import("../components/student/CreateComponent"),
+     meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/student/edit/:id',
+    name: 'edit',
+    component: () => import('../components/student/EditComponent'),
+    meta: {
+      requiresAuth: true
+    }
   }
 ];
 const router = new VueRouter({
