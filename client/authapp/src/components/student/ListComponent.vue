@@ -126,9 +126,7 @@ export default {
 .btn-success {
   margin-right: 10px;
 }
-.card {
-  margin: 2em;
-}
+
 
 .add-student-btn {
   float: right;

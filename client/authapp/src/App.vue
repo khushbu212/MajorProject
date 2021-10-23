@@ -45,3 +45,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.card {
+  margin: 2em;
+}
+</style>

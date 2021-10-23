@@ -1,42 +1,46 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-md-6">
-      <h3 class="text-center">Create Student</h3>
-      <form @submit.prevent="handleSubmitForm">
-        <div class="form-group">
-          <label>Name</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="student.name"
-            required
-          />
-        </div>
+    <div class="col-6">
+      <div class="card">
+        <div class="card-header">Create Student</div>
+        <div class="card-body">
+          <form @submit.prevent="handleSubmitForm">
+            <div class="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="student.name"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            class="form-control"
-            v-model="student.email"
-            required
-          />
-        </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                class="form-control"
+                v-model="student.email"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <label>Phone</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="student.phone"
-            required
-          />
-        </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="student.phone"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <button class="btn btn-danger btn-block">Create</button>
+            <div class="form-group">
+              <button class="btn btn-danger btn-block create-btn">Create</button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -80,3 +84,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.create-btn{
+    margin: 0.5em;
+}
+</style>
