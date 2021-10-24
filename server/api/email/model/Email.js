@@ -6,7 +6,8 @@ const emailSchema = new Schema({
    groupId: String,
    schedule: String,
    subject: String,
-   message: String
+   message: String,
+   manager: Object
 },
    {timestamps: true}
 );

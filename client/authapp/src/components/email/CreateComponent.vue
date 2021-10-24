@@ -200,19 +200,7 @@ export default {
         console.log(error);
       });
   },
-  computed: {
-    schedule: () => {
-      this.time.sec +
-        " " +
-        this.time.min +
-        " " +
-        this.time.hour +
-        " " +
-        this.time.day +
-        " " +
-        this.time.week;
-    },
-  },
+  
   methods: {
     handleSubmitForm() {
       let token = localStorage.getItem("jwt");
@@ -226,6 +214,8 @@ export default {
         this.time.hour +
         " " +
         this.time.day +
+        " " +
+        this.time.month +
         " " +
         this.time.week;
 

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav" v-bind:class=" { 'navbarOpen': show }">
       <div class="container">
         <router-link to="/home" class="navbar-brand">Dashboard</router-link>

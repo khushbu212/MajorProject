@@ -137,7 +137,10 @@ exports.update = async (req, res) => {
     let email = await Email.findById(req.params.id).lean().exec();
     // update cron job
     manager = new CronJobManager();
+    // manager.deleteJob(email.name);
+    console.log(email.name);
     if (manager.exists(email.name)) {
+      manager.stop(email.name);
       manager.update(
         req.body.name,
         req.body.schedule, // the crontab schedule
@@ -174,6 +177,59 @@ exports.update = async (req, res) => {
           }
         }
       );
+      manager.stop(email.name);
+      manager.start(email.name);
+    }else{
+      manager1 = new CronJobManager();
+      manager1.stop(email.name);
+
+      manager = new CronJobManager( // this creates a new manager and adds the arguments as a new job.
+        req.body.name,
+        req.body.schedule, // the crontab schedule
+        async () => {
+          let group = await Group.findById(req.body.groupId)
+            .populate({ path: "students", select: "name email" })
+            .lean()
+            .exec();
+
+          let mails = [];
+
+          if (
+            typeof group.students !== "undefined" &&
+            group.students.length > 0
+          ) {
+            group.students.forEach((student) => {
+              mails.push(student.email);
+            });
+
+            mailData = {
+              from: "admin@admin.com", // sender address
+              to: mails, // list of receivers
+              subject: req.body.subject,
+              text: req.body.message,
+              html: `<p> ${req.body.message} </p>`,
+            };
+
+            transporter.sendMail(mailData, function (err, info) {
+              if (err) return console.log(err);
+              else {
+                console.log(info);
+              }
+            });
+          }
+        },
+        {
+          // extra options..
+          // see https://www.npmjs.com/package/cron for all available
+          start: true,
+          timeZone: "UTC",
+          onComplete: () => {
+            console.log(`${req.body.name} has stopped....`);
+          },
+        }
+      );
+  
+      manager.start(req.body.name);
     }
 
     // update email in the database
