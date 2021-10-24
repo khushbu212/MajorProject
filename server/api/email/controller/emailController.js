@@ -20,6 +20,7 @@ exports.add = async (req, res) => {
       req.body.name,
       req.body.schedule, // the crontab schedule
       async () => {
+        console.log("In job function");
         let group = await Group.findById(req.body.groupId)
           .populate({ path: "students", select: "name email" })
           .lean()
@@ -47,6 +48,7 @@ exports.add = async (req, res) => {
             if (err) return console.log(err);
             else {
               console.log(info);
+              console.log("Mail Sent")
             }
           });
         }
@@ -57,7 +59,7 @@ exports.add = async (req, res) => {
         start: true,
         timeZone: "UTC",
         onComplete: () => {
-          console.log("a_key_string_to_call_this_job has stopped....");
+          console.log("req.body.name has stopped....");
         },
       }
     );
@@ -185,7 +187,7 @@ exports.update = async (req, res) => {
           return next(error);
         } else {
           res.json(data);
-          console.log("Group successfully updated!");
+          console.log("Email successfully updated!");
         }
       }
     );

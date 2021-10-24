@@ -27,6 +27,9 @@
             <li class="nav-item">
               <router-link to="/student" class="nav-link">Students</router-link>
             </li>
+            <li class="nav-item">
+              <router-link to="/emails" class="nav-link">Emails</router-link>
+            </li>
             <li class="nav-item active logout-btn">
               <a class="btn btn-danger" @click="logUserOut"> Logout</a>
             </li>

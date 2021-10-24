@@ -70,6 +70,30 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: '/emails',
+    name: 'emails',
+    component: () => import('../views/email.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/emails/add',
+    name: 'email-add',
+    component: () => import("../components/email/CreateComponent"),
+     meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/emails/edit/:id',
+    name: 'email-edit',
+    component: () => import('../components/email/EditComponent'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 ];
 const router = new VueRouter({
   mode: "history",
