@@ -18,19 +18,35 @@
                         type="text"
                         class="form-control"
                         id="floatingInput"
-                        placeholder="name@example.com"
+                        placeholder="Name"
                       />
                       <label for="floatingInput">Name</label>
+                      <div class="error" v-if="!$v.register.name.required">
+                        Name is required
+                      </div>
+                      <div class="error" v-if="!$v.register.name.minLength">
+                        Name must have at least
+                        {{ $v.register.name.$params.minLength.min }} letters.
+                      </div>
                     </div>
                     <div class="form-floating mb-3">
                       <input
-                        v-model="register.email"
+                        v-model.trim="$v.register.email.$model"
                         type="email"
                         class="form-control"
                         id="floatingInput"
                         placeholder="name@example.com"
                       />
                       <label for="floatingInput">Email address</label>
+                      <div class="error" v-if="!$v.register.email.required">
+                        Email is required.
+                      </div>
+                      <div class="error" v-if="!$v.register.email.email">
+                        This is not vaild email.
+                      </div>
+                      <div class="error" v-if="!$v.register.email.isUnique">
+                        This email is already registered.
+                      </div>
                     </div>
                     <div class="form-floating mb-3">
                       <input
@@ -38,9 +54,20 @@
                         class="form-control"
                         id="floatingPassword"
                         placeholder="Password"
-                        v-model="register.password"
+                        v-model="$v.register.password.$model"
                       />
                       <label for="floatingPassword">Password</label>
+                      <div class="error" v-if="!$v.register.password.required">
+                        Password is required
+                      </div>
+
+                      <div class="error" v-if="!$v.register.password.minLength">
+                        Pasword must have at least
+                        {{
+                          $v.register.password.$params.minLength.min
+                        }}
+                        letters.
+                      </div>
                     </div>
 
                     <!-- <div class="form-check mb-3">
@@ -75,6 +102,9 @@
                           >click here</router-link
                         >
                         <!-- <a class="small" href="#">Forgot password?</a> -->
+                        <p class="error" v-if="submitStatus === 'ERROR'">
+                          Please fill the form correctly.
+                        </p>
                       </div>
                     </div>
                   </form>
@@ -85,11 +115,12 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
+// import axios from 'axios';
 const swal = require("sweetalert");
+import { required, minLength, email } from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -99,27 +130,62 @@ export default {
         email: "",
         password: "",
       },
+      submitStatus: null,
     };
+  },
+  validations: {
+    register: {
+      email: {
+        required,
+        email,
+        async isUnique(value) {
+          console.log(value);
+
+          let response = await this.$http.post("/user/check-unique-email", {
+            email: this.register.email,
+          });
+
+          if (response.data.exist) {
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
+      name: {
+        required,
+        minLength: minLength(4),
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+    },
   },
   methods: {
     async registerUser() {
-      try {
-        let response = await this.$http.post("/user/register", this.register);
-        console.log(response);
-        let token = response.data.token;
-        if (token) {
-          localStorage.setItem("jwt", token);
-          this.$router.push("/");
-          swal("Success", "Registration Was successful", "success");
-        } else {
-          swal("Error", "Something Went Wrong", "error");
-        }
-      } catch (err) {
-        let error = err.response;
-        if (error.status == 409) {
-          swal("Error", error.data.message, "error");
-        } else {
-          swal("Error", error.data.err.message, "error");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        try {
+          let response = await this.$http.post("/user/register", this.register);
+          console.log(response);
+          let token = response.data.token;
+          if (token) {
+            localStorage.setItem("jwt", token);
+            this.$router.push("/");
+            swal("Success", "Registration Was successful", "success");
+          } else {
+            swal("Error", "Something Went Wrong", "error");
+          }
+        } catch (err) {
+          let error = err.response;
+          if (error.status == 409) {
+            swal("Error", error.data.message, "error");
+          } else {
+            swal("Error", error.data.err.message, "error");
+          }
         }
       }
     },
@@ -133,7 +199,7 @@ export default {
 }
 
 .bg-image {
-  background-image: url("https://source.unsplash.com/WEQbe2jBg40/600x1200");
+  background-image: url("https://image.freepik.com/free-photo/abstract-fantasy-landscape-background_23-2149124340.jpg");
   background-size: cover;
   background-position: center;
 }

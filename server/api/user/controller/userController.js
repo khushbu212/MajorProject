@@ -43,3 +43,16 @@ exports.loginUser = async (req, res) => {
 exports.getUserDetails = async (req, res) => {
   await res.json(req.userData);
 };
+
+exports.uniqueEmail = async (req, res ) => {
+
+  User.find({email : req.body.email}, (err, docs) => {
+    if (!docs.length){
+      res.status(200).json({ 'exist': false })
+    }else{                
+        console.log('user exists: ',req.body.email);
+        res.status(200).json({ 'exist': true })
+    }
+});
+
+}

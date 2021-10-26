@@ -14,13 +14,19 @@
                   <form @submit.prevent="loginUser">
                     <div class="form-floating mb-3">
                       <input
-                        v-model="login.email"
+                        v-model="$v.login.email.$model"
                         type="email"
                         class="form-control"
                         id="floatingInput"
                         placeholder="name@example.com"
                       />
                       <label for="floatingInput">Email address</label>
+                      <div class="error" v-if="!$v.login.email.required">
+                        Email is required.
+                      </div>
+                      <div class="error" v-if="!$v.login.email.email">
+                        This is not vaild email.
+                      </div>
                     </div>
                     <div class="form-floating mb-3">
                       <input
@@ -28,9 +34,20 @@
                         class="form-control"
                         id="floatingPassword"
                         placeholder="Password"
-                        v-model="login.password"
+                        v-model="$v.login.password.$model"
                       />
                       <label for="floatingPassword">Password</label>
+                      <div class="error" v-if="!$v.login.password.required">
+                        Password is required
+                      </div>
+
+                      <div class="error" v-if="!$v.login.password.minLength">
+                        Pasword must have at least
+                        {{
+                          $v.register.password.$params.minLength.min
+                        }}
+                        letters.
+                      </div>
                     </div>
 
                     <!-- <div class="form-check mb-3">
@@ -61,8 +78,12 @@
                         Sign in
                       </button>
                       <div class="text-center">
-                        Don't have an account? <router-link to="/register">Create One</router-link>
+                        Don't have an account?
+                        <router-link to="/register">Create One</router-link>
                         <!-- <a class="small" href="#">Forgot password?</a> -->
+                        <p class="error" v-if="submitStatus === 'ERROR'">
+                          Please fill the form correctly.
+                        </p>
                       </div>
                     </div>
                   </form>
@@ -77,6 +98,8 @@
 </template>
 <script>
 const swal = require("sweetalert");
+import { required, minLength, email } from "vuelidate/lib/validators";
+
 export default {
   data() {
     return {
@@ -84,29 +107,46 @@ export default {
         email: "",
         password: "",
       },
+      submitStatus: null,
     };
   },
 
   beforeCreate() {
-    if(localStorage.getItem("jwt") != null){
+    if (localStorage.getItem("jwt") != null) {
       console.log("Already login");
       this.$router.push("/home");
     }
   },
- 
+  validations: {
+    login: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+    },
+  },
   methods: {
     async loginUser() {
-      try {
-        let response = await this.$http.post("/user/login", this.login);
-        let token = response.data.token;
-        localStorage.setItem("jwt", token);
-        if (token) {
-          swal("Success", "Login Successful", "success");
-          this.$router.push("/home");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        try {
+          let response = await this.$http.post("/user/login", this.login);
+          let token = response.data.token;
+          localStorage.setItem("jwt", token);
+          if (token) {
+            swal("Success", "Login Successful", "success");
+            this.$router.push("/home");
+          }
+        } catch (err) {
+          swal("Error", "Something Went Wrong", "error");
+          console.log(err.response);
         }
-      } catch (err) {
-        swal("Error", "Something Went Wrong", "error");
-        console.log(err.response);
       }
     },
   },
@@ -119,7 +159,7 @@ export default {
 }
 
 .bg-image {
-  background-image: url("https://source.unsplash.com/WEQbe2jBg40/600x1200");
+  background-image: url("https://image.freepik.com/free-photo/abstract-fantasy-landscape-background_23-2149124340.jpg");
   background-size: cover;
   background-position: center;
 }

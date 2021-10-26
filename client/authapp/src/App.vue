@@ -75,4 +75,9 @@ export default {
 .logout-btn {
   margin-left: 1em;
 }
+
+.error {
+  color: red;
+}
+
 </style>

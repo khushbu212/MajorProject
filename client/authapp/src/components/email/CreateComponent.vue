@@ -10,13 +10,16 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="email.name"
+                v-model="$v.email.name.$model"
                 required
               />
+              <div class="error" v-if="!$v.email.name.required">
+                Name is required
+              </div>
             </div>
             <div class="form-group">
               <label>Group</label>
-              <select v-model="email.groupId" class="form-control">
+              <select v-model="$v.email.groupId.$model" class="form-control">
                 <option
                   v-for="group in groups"
                   v-bind:value="group.id"
@@ -25,6 +28,9 @@
                   {{ group.name }}
                 </option>
               </select>
+              <div class="error" v-if="!$v.email.groupId.required">
+                Group is required
+              </div>
             </div>
 
             <div class="form-group">
@@ -32,20 +38,30 @@
               <input
                 type="text"
                 class="form-control"
-                v-model="email.subject"
+                v-model="$v.email.subject.$model"
                 required
               />
+              <div class="error" v-if="!$v.email.subject.required">
+                Subject is required
+              </div>
             </div>
 
             <div class="form-group">
               <label>Email Message</label>
-              <textarea class="form-control" v-model="email.message" required />
+              <textarea
+                class="form-control"
+                v-model="$v.email.message.$model"
+                required
+              />
+              <div class="error" v-if="!$v.email.message.required">
+                Message is required
+              </div>
             </div>
 
             <div class="form-group">
               <label>Schedule</label>
               <div class="row">
-                <div class="col-2">
+                <!-- <div class="col-2">
                   <label for="">Seconds</label>
                   <select v-model="time.sec" class="form-control">
                     <option
@@ -57,7 +73,7 @@
                     </option>
                     <option value="*">Every Second</option>
                   </select>
-                </div>
+                </div> -->
                 <div class="col-2">
                   <label for="">Minutes</label>
                   <select v-model="time.min" class="form-control">
@@ -123,6 +139,25 @@
                     <option value="*">Every Week</option>
                   </select>
                 </div>
+
+                <div class="error" v-if="!$v.time.min.required">
+                  Minutes required
+                </div>
+                <div class="error" v-if="!$v.time.sec.required">
+                  Seconds required
+                </div>
+                <div class="error" v-if="!$v.time.hour.required">
+                  Hour required
+                </div>
+                <div class="error" v-if="!$v.time.day.required">
+                  Day required
+                </div>
+                <div class="error" v-if="!$v.time.month.required">
+                  Month required
+                </div>
+                <div class="error" v-if="!$v.time.week.required">
+                  Week required
+                </div>
               </div>
             </div>
 
@@ -130,6 +165,9 @@
               <button class="btn btn-danger btn-block create-btn">
                 Create
               </button>
+              <p class="error" v-if="submitStatus === 'ERROR'">
+                Please fill the form correctly.
+              </p>
             </div>
           </form>
         </div>
@@ -140,6 +178,7 @@
 
 <script>
 import axios from "axios";
+import { required } from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -151,8 +190,9 @@ export default {
         subject: "",
         message: "",
       },
+      submitStatus: null,
       time: {
-        sec: "",
+        sec: "01",
         min: "",
         day: "",
         week: "",
@@ -161,9 +201,124 @@ export default {
       },
       groups: {},
       range: {
-        min_sec: [...Array(60)].map((_, i) => 0 + i * 1),
-        hours: [...Array(24)].map((_, i) => 0 + i * 1),
-        day: [...Array(31)].map((_, i) => 1 + i * 1),
+        min_sec: [
+          "00",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31",
+          "32",
+          "33",
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44",
+          "45",
+          "46",
+          "47",
+          "48",
+          "49",
+          "50",
+          "51",
+          "52",
+          "54",
+          "55",
+          "56",
+          "57",
+          "58",
+          "59",
+          "60",
+        ],
+        hours: [
+          "00",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+        ],
+        day: [
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31",
+        ],
         month: [
           "January",
           "February",
@@ -200,52 +355,93 @@ export default {
         console.log(error);
       });
   },
-  
+  validations: {
+    email: {
+      name: {
+        required,
+      },
+      groupId: {
+        required,
+      },
+      subject: {
+        required,
+      },
+      message: {
+        required,
+      },
+    },
+    time: {
+      sec: {
+        required,
+      },
+      min: {
+        required,
+      },
+      day: {
+        required,
+      },
+      week: {
+        required,
+      },
+      month: {
+        required,
+      },
+      hour: {
+        required,
+      },
+    },
+  },
+
   methods: {
     handleSubmitForm() {
-      let token = localStorage.getItem("jwt");
-      let apiURL = "http://localhost:4000/email/schedule-email";
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = "ERROR";
+      } else {
+        let token = localStorage.getItem("jwt");
+        let apiURL = "http://localhost:4000/email/schedule-email";
 
-      this.email.schedule =
-        this.time.sec +
-        " " +
-        this.time.min +
-        " " +
-        this.time.hour +
-        " " +
-        this.time.day +
-        " " +
-        this.time.month +
-        " " +
-        this.time.week;
+        this.email.schedule =
+          this.time.sec +
+          " " +
+          this.time.min +
+          " " +
+          this.time.hour +
+          " " +
+          this.time.day +
+          " " +
+          this.time.month +
+          " " +
+          this.time.week;
 
-      axios
-        .post(apiURL, this.email, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then(() => {
-          this.$router.push("/emails");
-          this.email = {
-            name: "",
-            groupId: "",
-            schedule: "",
-            subject: "",
-            message: "",
-          };
-          this.time = {
-            sec: "",
-            min: "",
-            day: "",
-            week: "",
-            month: "",
-            hour: "",
-          };
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        axios
+          .post(apiURL, this.email, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then(() => {
+            this.$router.push("/emails");
+            this.email = {
+              name: "",
+              groupId: "",
+              schedule: "",
+              subject: "",
+              message: "",
+            };
+            this.time = {
+              sec: "",
+              min: "",
+              day: "",
+              week: "",
+              month: "",
+              hour: "",
+            };
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
   },
 };
