@@ -21,12 +21,14 @@
                         placeholder="Name"
                       />
                       <label for="floatingInput">Name</label>
-                      <div class="error" v-if="!$v.register.name.required">
-                        Name is required
-                      </div>
-                      <div class="error" v-if="!$v.register.name.minLength">
-                        Name must have at least
-                        {{ $v.register.name.$params.minLength.min }} letters.
+                      <div v-if="$v.register.name.$error">
+                        <div class="error" v-if="!$v.register.name.required">
+                          Name is required
+                        </div>
+                        <div class="error" v-if="!$v.register.name.minLength">
+                          Name must have at least
+                          {{ $v.register.name.$params.minLength.min }} letters.
+                        </div>
                       </div>
                     </div>
                     <div class="form-floating mb-3">
@@ -38,14 +40,16 @@
                         placeholder="name@example.com"
                       />
                       <label for="floatingInput">Email address</label>
-                      <div class="error" v-if="!$v.register.email.required">
-                        Email is required.
-                      </div>
-                      <div class="error" v-if="!$v.register.email.email">
-                        This is not vaild email.
-                      </div>
-                      <div class="error" v-if="!$v.register.email.isUnique">
-                        This email is already registered.
+                      <div v-if="$v.register.email.$error">
+                        <div class="error" v-if="!$v.register.email.required">
+                          Email is required.
+                        </div>
+                        <div class="error" v-if="!$v.register.email.email">
+                          This is not vaild email.
+                        </div>
+                        <div class="error" v-if="!$v.register.email.isUnique">
+                          This email is already registered.
+                        </div>
                       </div>
                     </div>
                     <div class="form-floating mb-3">
@@ -57,16 +61,22 @@
                         v-model="$v.register.password.$model"
                       />
                       <label for="floatingPassword">Password</label>
-                      <div class="error" v-if="!$v.register.password.required">
-                        Password is required
-                      </div>
+                      <div v-if="$v.register.password.$error">
+                        <div
+                          class="error"
+                          v-if="!$v.register.password.required"
+                        >
+                          Password is required
+                        </div>
 
-                      <div class="error" v-if="!$v.register.password.minLength">
-                        Pasword must have at least
-                        {{
-                          $v.register.password.$params.minLength.min
-                        }}
-                        letters.
+                        <div
+                          class="error"
+                          v-if="!$v.register.password.minLength"
+                        >
+                          Pasword must have at least
+                          {{ $v.register.password.$params.minLength.min }}
+                          letters.
+                        </div>
                       </div>
                     </div>
 

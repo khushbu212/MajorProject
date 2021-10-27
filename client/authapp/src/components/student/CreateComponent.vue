@@ -13,8 +13,10 @@
                 v-model="$v.student.name.$model"
                 required
               />
-              <div class="error" v-if="!$v.student.name.required">
-                Name is required
+              <div v-if="$v.student.name.$error">
+                <div class="error" v-if="!$v.student.name.required">
+                  Name is required
+                </div>
               </div>
             </div>
 
@@ -26,11 +28,13 @@
                 v-model="$v.student.email.$model"
                 required
               />
-              <div class="error" v-if="!$v.student.email.required">
-                Email is required.
-              </div>
-              <div class="error" v-if="!$v.student.email.email">
-                This is not vaild email.
+              <div v-if="$v.student.email.$error">
+                <div class="error" v-if="!$v.student.email.required">
+                  Email is required.
+                </div>
+                <div class="error" v-if="!$v.student.email.email">
+                  This is not vaild email.
+                </div>
               </div>
             </div>
 
@@ -42,16 +46,18 @@
                 v-model="$v.student.phone.$model"
                 required
               />
-              <div class="error" v-if="!$v.student.phone.required">
-                Phone number is required
-              </div>
-              <div class="error" v-if="!$v.student.phone.numeric">
-                Enter numeric values only.
-              </div>
-              <div class="error" v-if="!$v.student.phone.maxLength">
-                Phone number cannot be greater than
-                {{ $v.student.phone.$params.maxLength.max }}
-                digit.
+              <div v-if="$v.student.phone.$error">
+                <div class="error" v-if="!$v.student.phone.required">
+                  Phone number is required
+                </div>
+                <div class="error" v-if="!$v.student.phone.numeric">
+                  Enter numeric values only.
+                </div>
+                <div class="error" v-if="!$v.student.phone.maxLength">
+                  Phone number cannot be greater than
+                  {{ $v.student.phone.$params.maxLength.max }}
+                  digit.
+                </div>
               </div>
             </div>
             <div class="form-group">
@@ -65,8 +71,10 @@
                   {{ group.name }}
                 </option>
               </select>
-              <div class="error" v-if="!$v.student.group.required">
-                Group is required
+              <div v-if="$v.student.group.$error">
+                <div class="error" v-if="!$v.student.group.required">
+                  Group is required
+                </div>
               </div>
             </div>
 

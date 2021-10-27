@@ -21,11 +21,13 @@
                         placeholder="name@example.com"
                       />
                       <label for="floatingInput">Email address</label>
-                      <div class="error" v-if="!$v.login.email.required">
-                        Email is required.
-                      </div>
-                      <div class="error" v-if="!$v.login.email.email">
-                        This is not vaild email.
+                      <div v-if="$v.login.email.$error">
+                        <div class="error" v-if="!$v.login.email.required">
+                          Email is required.
+                        </div>
+                        <div class="error" v-if="!$v.login.email.email">
+                          This is not vaild email.
+                        </div>
                       </div>
                     </div>
                     <div class="form-floating mb-3">
@@ -37,16 +39,16 @@
                         v-model="$v.login.password.$model"
                       />
                       <label for="floatingPassword">Password</label>
-                      <div class="error" v-if="!$v.login.password.required">
-                        Password is required
-                      </div>
+                      <div v-if="$v.login.password.$error">
+                        <div class="error" v-if="!$v.login.password.required">
+                          Password is required
+                        </div>
 
-                      <div class="error" v-if="!$v.login.password.minLength">
-                        Pasword must have at least
-                        {{
-                          $v.register.password.$params.minLength.min
-                        }}
-                        letters.
+                        <div class="error" v-if="!$v.login.password.minLength">
+                          Pasword must have at least
+                          {{ $v.register.password.$params.minLength.min }}
+                          letters.
+                        </div>
                       </div>
                     </div>
 

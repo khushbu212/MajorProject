@@ -13,8 +13,10 @@
                 v-model="$v.group.name.$model"
                 required
               />
-              <div class="error" v-if="!$v.group.name.required">
-                Name is required
+              <div v-if="$v.group.name.$error">
+                <div class="error" v-if="!$v.group.name.required">
+                  Name is required
+                </div>
               </div>
             </div>
 
@@ -62,22 +64,23 @@ export default {
         let token = localStorage.getItem("jwt");
         // let apiURL = "http://localhost:4000/group/add";
 
-        let response = await this.$http.post("/group/add", this.group,{
+        let response = await this.$http
+          .post("/group/add", this.group, {
             headers: {
               Authorization: token,
             },
-          }) .catch((error) => {
-
+          })
+          .catch((error) => {
             console.log(error);
-            this.$swal('Error',error,'error');
+            this.$swal("Error", error, "error");
             return;
           });
 
-          console.log(response);
-           this.$router.push("/groups");
-            this.group = {
-              name: "",
-            };
+        console.log(response);
+        this.$router.push("/groups");
+        this.group = {
+          name: "",
+        };
 
         // axios
         //   .post(apiURL, this.group, {

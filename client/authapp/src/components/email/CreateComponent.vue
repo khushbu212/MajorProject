@@ -11,10 +11,11 @@
                 type="text"
                 class="form-control"
                 v-model="$v.email.name.$model"
-                required
               />
-              <div class="error" v-if="!$v.email.name.required">
-                Name is required
+              <div v-if="$v.email.name.$error">
+                <div class="error" v-if="!$v.email.name.required">
+                  Name is required
+                </div>
               </div>
             </div>
             <div class="form-group">
@@ -28,8 +29,10 @@
                   {{ group.name }}
                 </option>
               </select>
-              <div class="error" v-if="!$v.email.groupId.required">
-                Group is required
+              <div v-if="$v.email.groupId.$error">
+                <div class="error" v-if="!$v.email.groupId.required">
+                  Group is required
+                </div>
               </div>
             </div>
 
@@ -41,8 +44,10 @@
                 v-model="$v.email.subject.$model"
                 required
               />
-              <div class="error" v-if="!$v.email.subject.required">
-                Subject is required
+              <div v-if="$v.email.groupId.$error">
+                <div class="error" v-if="!$v.email.subject.required">
+                  Subject is required
+                </div>
               </div>
             </div>
 
@@ -53,14 +58,16 @@
                 v-model="$v.email.message.$model"
                 required
               />
-              <div class="error" v-if="!$v.email.message.required">
-                Message is required
+              <div v-if="$v.email.message.$error">
+                <div class="error" v-if="!$v.email.message.required">
+                  Message is required
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label>Schedule</label>
-              <div class="row">
+            <div class="form-group mt-2">
+              <label >Schedule</label>
+              <div class="row mt-1 mb-1">
                 <!-- <div class="col-2">
                   <label for="">Seconds</label>
                   <select v-model="time.sec" class="form-control">
@@ -76,7 +83,7 @@
                 </div> -->
                 <div class="col-2">
                   <label for="">Minutes</label>
-                  <select v-model="time.min" class="form-control">
+                  <select v-model="$v.time.min.$model" class="form-control">
                     <option
                       v-for="num in range.min_sec"
                       v-bind:value="num"
@@ -89,7 +96,7 @@
                 </div>
                 <div class="col-2">
                   <label for="">Hour</label>
-                  <select v-model="time.hour" class="form-control">
+                  <select v-model="$v.time.hour.$model" class="form-control">
                     <option
                       v-for="num in range.hours"
                       v-bind:value="num"
@@ -102,7 +109,7 @@
                 </div>
                 <div class="col-2">
                   <label for="">Day</label>
-                  <select v-model="time.day" class="form-control">
+                  <select v-model="$v.time.day.$model" class="form-control">
                     <option
                       v-for="num in range.day"
                       v-bind:value="num"
@@ -115,7 +122,7 @@
                 </div>
                 <div class="col-2">
                   <label for="">Month</label>
-                  <select v-model="time.month" class="form-control">
+                  <select v-model="$v.time.month.$model" class="form-control">
                     <option
                       v-for="num in range.month"
                       v-bind:value="num"
@@ -128,7 +135,7 @@
                 </div>
                 <div class="col-2">
                   <label for="">Day week</label>
-                  <select v-model="time.week" class="form-control">
+                  <select v-model="$v.time.week.$model" class="form-control">
                     <option
                       v-for="num in range.week"
                       v-bind:value="num"
@@ -140,23 +147,40 @@
                   </select>
                 </div>
 
-                <div class="error" v-if="!$v.time.min.required">
-                  Minutes required
+                <div v-if="$v.time.min.$error">
+                  <div class="error" v-if="!$v.time.min.required">
+                    Minutes required
+                  </div>
                 </div>
-                <div class="error" v-if="!$v.time.sec.required">
-                  Seconds required
+
+                <div v-if="$v.time.sec.$error">
+                  <div class="error" v-if="!$v.time.sec.required">
+                    Seconds required
+                  </div>
                 </div>
-                <div class="error" v-if="!$v.time.hour.required">
-                  Hour required
+
+                <div v-if="$v.time.hour.$error">
+                  <div class="error" v-if="!$v.time.hour.required">
+                    Hour required
+                  </div>
                 </div>
-                <div class="error" v-if="!$v.time.day.required">
-                  Day required
+
+                <div v-if="$v.time.day.$error">
+                  <div class="error" v-if="!$v.time.day.required">
+                    Day required
+                  </div>
                 </div>
-                <div class="error" v-if="!$v.time.month.required">
-                  Month required
+
+                <div v-if="$v.time.month.$error">
+                  <div class="error" v-if="!$v.time.month.required">
+                    Month required
+                  </div>
                 </div>
-                <div class="error" v-if="!$v.time.week.required">
-                  Week required
+
+                <div v-if="$v.time.week.$error">
+                  <div class="error" v-if="!$v.time.week.required">
+                    Week required
+                  </div>
                 </div>
               </div>
             </div>

@@ -13,8 +13,10 @@
                 v-model="$v.group.name.$model"
                 required
               />
-              <div class="error" v-if="!$v.group.name.required">
-                Name is required
+              <div v-if="$v.group.name.$error">
+                <div class="error" v-if="!$v.group.name.required">
+                  Name is required
+                </div>
               </div>
             </div>
 
