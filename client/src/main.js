@@ -15,7 +15,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueSweetalert2);
 
 const base = axios.create({
-  baseURL: "http://localhost:4000"
+  baseURL: "http://localhost:55667"
 });
 
 Vue.prototype.$http = base;
