@@ -2,6 +2,7 @@ const Group = require("../../group/model/Group");
 const Email = require("../model/Email");
 const nodemailer = require("nodemailer");
 var CronJobManager = require("cron-job-manager");
+const manager = new CronJobManager();
 
 exports.add = async (req, res) => {
   try {
@@ -16,8 +17,8 @@ exports.add = async (req, res) => {
       },
     });
 
-    manager = new CronJobManager( // this creates a new manager and adds the arguments as a new job.
-      req.body.name,
+
+    manager.add(req.body.name,
       req.body.schedule, // the crontab schedule
       async () => {
         console.log("In job function");
@@ -52,17 +53,20 @@ exports.add = async (req, res) => {
             }
           });
         }
-      },
-      {
-        // extra options..
-        // see https://www.npmjs.com/package/cron for all available
-        start: true,
-        timeZone: "UTC",
-        onComplete: () => {
-          console.log("req.body.name has stopped....");
-        },
-      }
-    );
+      });
+
+    // manager1 = new CronJobManager( // this creates a new manager and adds the arguments as a new job.
+    //   ,
+    //   {
+    //     // extra options..
+    //     // see https://www.npmjs.com/package/cron for all available
+    //     start: true,
+    //     timeZone: "UTC",
+    //     onComplete: () => {
+    //       console.log("req.body.name has stopped....");
+    //     },
+    //   }
+    // );
 
     manager.start(req.body.name);
 
@@ -136,13 +140,13 @@ exports.update = async (req, res) => {
     // get email
     let email = await Email.findById(req.params.id).lean().exec();
     // update cron job
-    manager = new CronJobManager();
+    // manager = new CronJobManager();
     // manager.deleteJob(email.name);
     console.log(email.name);
     if (manager.exists(email.name)) {
       manager.stop(email.name);
       manager.update(
-        req.body.name,
+        email.name,
         req.body.schedule, // the crontab schedule
         async () => {
           let group = await Group.findById(req.body.groupId)
@@ -180,20 +184,20 @@ exports.update = async (req, res) => {
       manager.stop(email.name);
       manager.start(email.name);
     }else{
-      manager1 = new CronJobManager();
-      manager1.stop(email.name);
+      // manager1 = new CronJobManager();
+      // manager1.stop(email.name);
 
-      manager = new CronJobManager( // this creates a new manager and adds the arguments as a new job.
-        req.body.name,
+      manager.add(req.body.name,
         req.body.schedule, // the crontab schedule
         async () => {
+          console.log("In job function");
           let group = await Group.findById(req.body.groupId)
             .populate({ path: "students", select: "name email" })
             .lean()
             .exec();
-
+  
           let mails = [];
-
+  
           if (
             typeof group.students !== "undefined" &&
             group.students.length > 0
@@ -201,7 +205,7 @@ exports.update = async (req, res) => {
             group.students.forEach((student) => {
               mails.push(student.email);
             });
-
+  
             mailData = {
               from: "admin@admin.com", // sender address
               to: mails, // list of receivers
@@ -209,25 +213,16 @@ exports.update = async (req, res) => {
               text: req.body.message,
               html: `<p> ${req.body.message} </p>`,
             };
-
+  
             transporter.sendMail(mailData, function (err, info) {
               if (err) return console.log(err);
               else {
                 console.log(info);
+                console.log("Mail Sent")
               }
             });
           }
-        },
-        {
-          // extra options..
-          // see https://www.npmjs.com/package/cron for all available
-          start: true,
-          timeZone: "UTC",
-          onComplete: () => {
-            console.log(`${req.body.name} has stopped....`);
-          },
-        }
-      );
+        });
   
       manager.start(req.body.name);
     }
@@ -257,7 +252,7 @@ exports.delete = async (req, res) => {
   try {
     // get email
     let email = await Email.findById(req.params.id).lean().exec();
-    manager = new CronJobManager();
+    // manager = new CronJobManager();
     manager.deleteJob(email.name);
 
     Email.findByIdAndRemove(req.params.id, (error, data) => {
@@ -274,3 +269,21 @@ exports.delete = async (req, res) => {
     res.status(400).json({ err: err });
   }
 };
+
+exports.test = async (req, res) => {
+
+  try{
+
+    var jobs = manager.listCrons();
+    console.log("Displaying the job");
+    console.log(jobs);
+    res.status(200).json({
+      msg: jobs,
+    });
+
+  }catch(err) {
+    console.log(err);
+    res.status(400).json({err: err});
+  }
+
+}
