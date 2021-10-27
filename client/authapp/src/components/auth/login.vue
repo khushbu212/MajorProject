@@ -43,12 +43,6 @@
                         <div class="error" v-if="!$v.login.password.required">
                           Password is required
                         </div>
-
-                        <div class="error" v-if="!$v.login.password.minLength">
-                          Pasword must have at least
-                          {{ $v.register.password.$params.minLength.min }}
-                          letters.
-                        </div>
                       </div>
                     </div>
 
@@ -127,7 +121,6 @@ export default {
       },
       password: {
         required,
-        minLength: minLength(6),
       },
     },
   },
