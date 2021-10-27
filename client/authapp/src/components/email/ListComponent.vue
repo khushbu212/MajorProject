@@ -52,7 +52,7 @@
 
 <script>
 
-import axios from "axios";
+// import axios from "axios";
 
 export default {
     data() {
@@ -61,10 +61,10 @@ export default {
         }
     },
     mounted() {
-        let apiURL = "http://localhost:4000/email/"
+        let apiURL = "/email/"
         let token = localStorage.getItem("jwt");
 
-    axios.get(apiURL,{
+    this.$http.get(apiURL,{
           headers: {
             Authorization: token,
           },
@@ -79,7 +79,7 @@ export default {
       deleteEmail(id){
         let token = localStorage.getItem("jwt");
 
-      let apiURL = `http://localhost:4000/email/delete/${id}`;
+      let apiURL = `/email/delete/${id}`;
       let indexOfArrayItem = this.emails.findIndex((i) => i._id === id);
 
       this.$swal({
@@ -94,7 +94,7 @@ export default {
         buttonsStyling: true,
       }).then((isConfirm) => {
         if (isConfirm.value === true) {
-          axios
+          this.$http
             .delete(apiURL, {
               headers: {
                 Authorization: token,
