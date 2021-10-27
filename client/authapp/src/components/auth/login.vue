@@ -94,7 +94,7 @@
 </template>
 <script>
 const swal = require("sweetalert");
-import { required, minLength, email } from "vuelidate/lib/validators";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
   data() {
