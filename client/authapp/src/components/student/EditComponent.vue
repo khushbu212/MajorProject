@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { required, email, maxLength, numeric } from "vuelidate/lib/validators";
 
 export default {
@@ -107,10 +107,10 @@ export default {
     };
   },
   mounted() {
-    let apiURL = "http://localhost:4000/group/";
+    let apiURL = "/group/";
     let token = localStorage.getItem("jwt");
 
-    axios
+    this.$http
       .get(apiURL, {
         headers: {
           Authorization: token,
@@ -126,9 +126,9 @@ export default {
   },
   created() {
     let token = localStorage.getItem("jwt");
-    let apiURL = `http://localhost:4000/student/edit-student/${this.$route.params.id}`;
+    let apiURL = `/student/edit-student/${this.$route.params.id}`;
 
-    axios
+    this.$http
       .get(apiURL, {
         headers: {
           Authorization: token,
@@ -164,9 +164,9 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         let token = localStorage.getItem("jwt");
-        let apiURL = `http://localhost:4000/student/update-student/${this.$route.params.id}`;
+        let apiURL = `/student/update-student/${this.$route.params.id}`;
 
-        axios
+        this.$http
           .post(apiURL, this.student, {
             headers: {
               Authorization: token,

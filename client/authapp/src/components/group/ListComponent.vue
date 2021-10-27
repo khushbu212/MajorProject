@@ -52,7 +52,7 @@
 
 <script>
 
-import axios from "axios";
+// import axios from "axios";
 
 export default {
     data() {
@@ -61,10 +61,10 @@ export default {
         }
     },
     mounted() {
-        let apiURL = "http://localhost:4000/group/"
+        let apiURL = "/group/"
         let token = localStorage.getItem("jwt");
 
-    axios.get(apiURL,{
+    this.$http.get(apiURL,{
           headers: {
             Authorization: token,
           },
@@ -79,7 +79,7 @@ export default {
       deleteGroup(id){
         let token = localStorage.getItem("jwt");
 
-      let apiURL = `http://localhost:4000/group/delete/${id}`;
+      let apiURL = `/group/delete/${id}`;
       let indexOfArrayItem = this.groups.findIndex((i) => i._id === id);
 
       this.$swal({
@@ -94,7 +94,7 @@ export default {
         buttonsStyling: true,
       }).then((isConfirm) => {
         if (isConfirm.value === true) {
-          axios
+          this.$http
             .delete(apiURL, {
               headers: {
                 Authorization: token,

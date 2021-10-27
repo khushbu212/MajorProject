@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   data() {
@@ -63,8 +63,8 @@ export default {
   },
   created() {
     let token = localStorage.getItem("jwt");
-    let apiURL = "http://localhost:4000/student/";
-    axios
+    let apiURL = "/student/";
+    this.$http
       .get(apiURL, {
         headers: {
           Authorization: token,
@@ -82,7 +82,7 @@ export default {
     deleteStudent(id) {
       let token = localStorage.getItem("jwt");
 
-      let apiURL = `http://localhost:4000/student/delete-student/${id}`;
+      let apiURL = `/student/delete-student/${id}`;
       let indexOfArrayItem = this.Students.findIndex((i) => i._id === id);
 
       this.$swal({
@@ -97,7 +97,7 @@ export default {
         buttonsStyling: true,
       }).then((isConfirm) => {
         if (isConfirm.value === true) {
-          axios
+          this.$http
             .delete(apiURL, {
               headers: {
                 Authorization: token,

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { required } from "vuelidate/lib/validators";
 
 export default {
@@ -50,12 +50,12 @@ export default {
   },
   created() {
     let token = localStorage.getItem("jwt");
-    let apiURL = `http://localhost:4000/group/edit/${this.$route.params.id}`;
+    let apiURL = `/group/edit/${this.$route.params.id}`;
     //  await this.$http.get(`/group/update/${this.$route.params.id}`).catch((error) => {
     //       console.log(error);
     //     });
     //   this.group = res.data;
-    axios
+    this.$http
       .get(apiURL, {
         headers: {
           Authorization: token,
@@ -91,9 +91,9 @@ export default {
         //   this.group = {
         //     name: "",
         //   };
-        let apiURL = `http://localhost:4000/group/update/${this.$route.params.id}`;
+        let apiURL = `/group/update/${this.$route.params.id}`;
 
-        axios
+        this.$http
           .post(apiURL, this.group, {
             headers: {
               Authorization: token,

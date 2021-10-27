@@ -202,7 +202,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { required } from "vuelidate/lib/validators";
 
 export default {
@@ -364,9 +364,9 @@ export default {
   },
   created() {
     let token = localStorage.getItem("jwt");
-    let apiURL = `http://localhost:4000/email/edit/${this.$route.params.id}`;
+    let apiURL = `/email/edit/${this.$route.params.id}`;
 
-    axios
+    this.$http
       .get(apiURL, {
         headers: {
           Authorization: token,
@@ -390,10 +390,10 @@ export default {
       });
   },
   mounted() {
-    let apiURL = "http://localhost:4000/group/";
+    let apiURL = "/group/";
     let token = localStorage.getItem("jwt");
 
-    axios
+    this.$http
       .get(apiURL, {
         headers: {
           Authorization: token,
@@ -450,7 +450,7 @@ export default {
         this.submitStatus = "ERROR";
       } else {
         let token = localStorage.getItem("jwt");
-        let apiURL = `http://localhost:4000/email/update/${this.$route.params.id}`;
+        let apiURL = `/email/update/${this.$route.params.id}`;
 
         this.email.schedule =
           this.time.sec +
@@ -465,7 +465,7 @@ export default {
           " " +
           this.time.week;
 
-        axios
+        this.$http
           .post(apiURL, this.email, {
             headers: {
               Authorization: token,
