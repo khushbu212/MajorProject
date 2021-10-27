@@ -144,9 +144,11 @@ export default {
           if (token) {
             swal("Success", "Login Successful", "success");
             this.$router.push("/home");
+          }else{
+            swal("Error", "Your credentials is wrong", "success");
           }
         } catch (err) {
-          swal("Error", "Something Went Wrong", "error");
+          swal("Error", 'You have entered an invalid username or password', "error");
           console.log(err.response);
         }
       }
